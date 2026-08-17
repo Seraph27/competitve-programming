@@ -4,6 +4,7 @@ struct DLX {
   int L[CAP], R[CAP], U[CAP], D[CAP], col[CAP], row[CAP];
   vector<int> firstRow, sizCol, stk;
 
+  // Rows and columns are 1-indexed; CAP includes column headers and all 1s.
   void build(int r, int c) {
     n = r; m = c; tot = m; ans = 0;
     for (int i = 0; i <= m; ++i) { L[i] = i - 1; R[i] = i + 1; U[i] = D[i] = i; }
@@ -14,7 +15,8 @@ struct DLX {
   }
 
   void insert(int r, int c) {
-    ++tot;
+      assert(tot + 1 < CAP);
+      ++tot;
     col[tot] = c; row[tot] = r; ++sizCol[c];
     D[tot] = D[c]; U[D[c]] = tot; U[tot] = c; D[c] = tot;
     if (!firstRow[r]) firstRow[r] = L[tot] = R[tot] = tot;

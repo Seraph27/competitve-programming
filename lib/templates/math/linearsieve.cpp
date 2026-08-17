@@ -1,3 +1,4 @@
+// Declare large instances globally; factorization inputs must be in [1, N].
 template <int N>
 struct sieve {
     vector<int> primes;
@@ -17,6 +18,8 @@ struct sieve {
     bool prime(int x) const {
         return spf[x] == x;
     }
+
+    // Prime factors with repetition.
     vector<int> facs(int x) const {
         vector<int> ret;
         while (x != 1) {
@@ -25,6 +28,8 @@ struct sieve {
         }
         return ret;
     }
+
+    // {prime, exponent} factorization.
     vector<array<int, 2>> facs2(int x) const {
         vector<array<int, 2>> ret;
         while (x != 1) {
@@ -34,6 +39,8 @@ struct sieve {
         }
         return ret;
     }
+
+    // All positive divisors, not sorted.
     vector<int> divs(int x) const {
         vector<int> divisors(1, 1);
         while (x > 1) {
@@ -50,3 +57,5 @@ struct sieve {
         return divisors;
     }
 };
+
+// sieve<1000000> sv;

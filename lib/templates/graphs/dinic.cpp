@@ -53,6 +53,7 @@ struct Dinic {
         return flow;
     }
 
+    // Destructively decomposes integral flow into unit S-T paths.
     vector<vector<int>> recover_path(int S, int T) {
         vector<vector<int>> paths;
         while (true) {

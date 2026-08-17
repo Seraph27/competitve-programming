@@ -57,33 +57,46 @@ void shiina_mashiro() {
         grid[r][c] = 1;
     }
     
-    queue<pii> bfs;
+    vector<vector<int>> ans(h, vector<int> (w, 0));
+    vector<vector<int>> vis(h, vector<int>(w, 0));
+    vector<vector<int>> cnt(h, vector<int>(w, 0));
+
+    queue<ar<int, 3>> bfs;
     pii dirs[4] = {{1, 0}, {0, 1}, {0, -1}, {-1, 0}};
+    
+    //add multi-source if more than 2 adjacent cells are goals
     for(int i = 0; i < h; i++) for(int j = 0; j < w; j++) {
-        if(!grid[i][j]) {
-            int cnt = 0;
-            for(auto& [dy, dx] : dirs) {
-                int nx = dx + j, ny = dy + i;
-                if(nx < 0 || ny < 0 || nx >= w || ny >= h) continue;
-                if(grid[ny][nx]) cnt++;
-            }
-            if(cnt >= 2) {
-                bfs.push({i, j});
-            }
+        for(auto &[dx, dy] : dirs) {
+            int nx = dx + j, ny = dy + i;
+            if(nx < 0 || ny < 0 || nx >= w || ny >= h) continue;
+            if(grid[i][j]) cnt[ny][nx]++;
         }
     }
 
-    vector<vector<int>> ans(h, vector<int> (w, 0));
+    for(int i = 0; i < h; i++) for(int j = 0; j < w; j++) {
+        if(!grid[i][j] && cnt[i][j] >= 2) {
+            vis[i][j] = 1;
+            bfs.push({i, j, 1});
+        }
+    }
 
     while(!bfs.empty()) {
-        auto [y, x] = bfs.front(); bfs.pop();
-
-        for(auto & [dy, dx] : dirs) {
-            int ny = dy + y, nx = dx + x;
-            if(nx < 0 || ny > 0 || nx >= w || ny >= h || grid[nx][ny]) continue;
-            
+        auto [y, x, dist] = bfs.front(); bfs.pop();
+        ans[y][x] = dist;
+        for(auto &[dx, dy] : dirs) {
+            int nx = dx + x, ny = dy + y;
+            if(nx < 0 || ny < 0 || nx >= w || ny >= h || grid[ny][nx]) continue;
+            cnt[ny][nx]++;
+            if(cnt[ny][nx] >= 2 && !vis[ny][nx]) {
+                vis[ny][nx] = 1;
+                bfs.push({ny, nx, dist + 1});
+            }
         }
     }
+
+    int res = 0;
+    for(int i = 0; i < h; i++) for(int j = 0; j < w; j++) res += ans[i][j];
+    cout << res << nl;
 }
 
 signed main() {    

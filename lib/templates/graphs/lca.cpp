@@ -4,6 +4,7 @@ struct LCA {
     vector<int> depth;
     vector<vector<int>> up;
 
+    // Connected tree rooted at root.
     LCA(const vector<vector<int>> &adj, int root = 0) : n(sz(adj)), LOG(0), root(root), adj(adj) {
         while ((1 << LOG) <= n) ++LOG;
         depth.assign(n, 0);

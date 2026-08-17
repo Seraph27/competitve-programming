@@ -54,6 +54,7 @@ template <int MOD_> struct modnum {
         return ret;
     }
 
+    // MOD must be prime and v must be nonzero.
     modnum inv() const {
         return binpow(*this, MOD-2);
     }
@@ -89,14 +90,9 @@ mint choose(int _a, int _b) {
 }
 
 void finit(const int nx) {
-    facs.resize(nx+1);
-    invfacs.resize(nx+1);
-    facs[0] = facs[1] = invfacs[0] = invfacs[1] = 1;
-    for (int i = 2; i <= nx; i++) {
-        facs[i] = facs[i-1] * mint(i);
-    }
+    facs.assign(nx + 1, 1);
+    invfacs.assign(nx + 1, 1);
+    for(int i = 1; i <= nx; i++) facs[i] = facs[i - 1] * mint(i);
     invfacs[nx] = inv(facs[nx]);
-    for (int i = nx-1; i > 1; i--) {
-        invfacs[i] = invfacs[i+1] * mint(i+1);
-    }
+    for(int i = nx; i >= 1; i--) invfacs[i - 1] = invfacs[i] * mint(i);
 }

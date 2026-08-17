@@ -1,5 +1,5 @@
 struct hopcroftkarp {
-    int nL, nR;
+    int nL, nR, D;
     vector<vector<int>> adj;
     vector<int> matchL, matchR, dist;
 
@@ -11,27 +11,28 @@ struct hopcroftkarp {
 
     bool bfs() {
         queue<int> q;
-        bool reachableR = false;
+        D = -1;
         fill(all(dist), -1);
         for(int u = 0; u < nL; u++) if(matchL[u] == -1) dist[u] = 0, q.push(u);
         while(!q.empty()) {
             auto f = q.front(); q.pop();
-            for(auto &e : adj[f]) {
+            if(D != -1 && dist[f] + 1 >= D) continue;
+            for(int e : adj[f]) {
                 int v = matchR[e];
-                if(v == -1) reachableR = true;
+                if(v == -1) D = dist[f] + 1;
                 else if(dist[v] == -1) {
                     dist[v] = dist[f] + 1;
                     q.push(v);
                 }
             }
         }
-        return reachableR;
+        return D != -1;
     }
 
     bool dfs(int u) {
-        for(auto&e : adj[u]) {
-            auto v = matchR[e];
-            if(v == -1 || (dist[v] == dist[u] + 1 && dfs(v))) {
+        for(int e : adj[u]) {
+            int v = matchR[e];
+            if((v == -1 && dist[u] + 1 == D) || (v != -1 && dist[v] == dist[u] + 1 && dfs(v))) {
                 matchL[u] = e;
                 matchR[e] = u;
                 return true;

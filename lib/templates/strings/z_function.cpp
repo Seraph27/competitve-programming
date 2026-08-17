@@ -1,5 +1,5 @@
-vector<int> z_function(string s) {
-    int n = s.size();
+vector<int> z_function(const string &s) {
+    int n = sz(s);
     vector<int> z(n);
     int l = 0, r = 0;
     for(int i = 1; i < n; i++) {
