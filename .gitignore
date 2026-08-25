@@ -21,3 +21,5 @@ lib/precompiled/stdc++.h.gch
 *.lua
 lib/snippets/cpp.json
 /projecteuler/target
+node_modules/
+.tsbuild/
